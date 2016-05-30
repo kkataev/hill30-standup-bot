@@ -15,8 +15,10 @@
 /log/*
 !/log/.keep
 /tmp
+install.log
 
 Vagrantfile
 .vagrant
 .idea
 *.msi
+common.cab
