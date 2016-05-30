@@ -47,5 +47,7 @@ gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 gem 'slack-ruby-client'
 gem 'eventmachine'
 gem 'faye-websocket'
+gem 'celluloid-io', require: ['celluloid/current', 'celluloid/io']
 gem 'sidekiq'
 gem 'devise'
+gem 'rufus-scheduler'
