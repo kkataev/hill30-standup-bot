@@ -14,10 +14,22 @@ class SlackWorker
     started = false
     client.on :hello do
       p "Successfully connected, welcome '#{client.self.name}' to the '#{client.team.name}' team at https://#{client.team.domain}.slack.com."
+
+    # EventMachine.run {
+    #   puts "Starting the run now: #{Time.now}"
+    #   EventMachine.add_timer 10, proc {  client.message channel: 'D1CPVHHJN', text: "Hi! Lets start the standup! Enter -n to start or go to the next step"}
+    #   EventMachine.add_timer(45) { puts "Executing timer event: #{Time.now}" }
+    # }
+
     end
 
     client.on :message do |data|
       case data.text
+        when '-h' then
+          client.message channel: data.channel, text: "hill30-standup-bot help:
+  -h help
+  -s start daily report
+  -n next report statement"
         when '-s' then
           client.message channel: data.channel, text: "Hi <@#{data.user}>! Lets start the standup! Enter -n to start or go to the next step"
           started = true
