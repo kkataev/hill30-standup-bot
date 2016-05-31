@@ -4,11 +4,44 @@
   <title>Hill30StandupBot</title>
   <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
   <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <link rel="stylesheet" href="//fonts.googleapis.com/icon?family=Material+Icons">
+  <link rel="stylesheet" href="//code.getmdl.io/1.1.3/material.indigo-pink.min.css">
+  <script defer src="//code.getmdl.io/1.1.3/material.min.js"></script>
   <%= csrf_meta_tags %>
 </head>
 <body>
 
-<%= yield %>
+<!-- Simple header with fixed tabs. -->
+<div class="mdl-layout mdl-js-layout mdl-layout--fixed-header mdl-layout--fixed-tabs">
+  <header class="mdl-layout__header">
+    <div class="mdl-layout__header-row">
+      <span class="mdl-layout-title">Scrum results</span>
+    </div>
+    <!-- Tabs -->
+    <div class="mdl-layout__tab-bar mdl-js-ripple-effect">
+      <a href="#fixed-tab-1" class="mdl-layout__tab is-active"> < </a>
+      <a href="#fixed-tab-2" class="mdl-layout__tab">TODAY</a>
+      <a href="#fixed-tab-3" class="mdl-layout__tab"> > </a>
+    </div>
+  </header>
+  <!--div class="mdl-layout__drawer">
+    <span class="mdl-layout-title">Title</span>
+  </div-->
+  <main class="mdl-layout__content">
+    <section class="mdl-layout__tab-panel" id="fixed-tab-1">
+      <div class="page-content"> <%= yield %></div>
+    </section>
+    <section class="mdl-layout__tab-panel  is-active" id="fixed-tab-2">
+      <div class="page-content"><%= yield %></div>
+    </section>
+    <section class="mdl-layout__tab-panel" id="fixed-tab-3">
+      <div class="page-content"><%= yield %></div>
+    </section>
+  </main>
+</div>
 
 </body>
 </html>
