@@ -13,9 +13,7 @@ class SlackWorker
     client = Slack::RealTime::Client.new
     scheduler = Rufus::Scheduler.new
 
-    reports = []
-    current_step = nil
-    started = false
+    reports = {}
 
     client.on :hello do
       p "Successfully connected, welcome '#{client.self.name}' to the '#{client.team.name}' team at https://#{client.team.domain}.slack.com."
@@ -29,6 +27,14 @@ class SlackWorker
     end
 
     client.on :message do |data|
+      unless reports[data.channel]
+        reports[data.channel] = {
+          started: false,
+          current_step: nil,
+          report: {}
+        }
+      end
+      p reports
       case data.text
         when '-h' then
           client.message channel: data.channel, text: "hill30-standup-bot help:
@@ -36,44 +42,40 @@ class SlackWorker
   -s start daily report
   -n next report statement"
         when '-s' then
-          client.message channel: data.channel, text: "Hi <@#{data.user}>! Lets start the standup! Enter -n to start or go to the next step"
-          started = true
+          if report = reports[data.channel]
+            report[:started] = true
+            client.message channel: data.channel, text: "Hi <@#{data.user}>! Lets start the standup! Enter -n to start or go to the next step"
+          end
         when '-r' then
           Slackbot::Register.call({ client: client, data: data })
-          #SlackBotHelper::Register.register(client, data)
         when '-n' then
-          if started # TODO: Chech that daily report already exist
-            case current_step
-              when nil then
-                client.message channel: data.channel, text: FIRST_STEP
-                current_step = FIRST_STEP
-              when FIRST_STEP then
-                client.message channel: data.channel, text: SECOND_STEP
-                current_step = SECOND_STEP
-              when SECOND_STEP then
-                client.message channel: data.channel, text: THIRD_STEP
-                current_step = THIRD_STEP
-              when THIRD_STEP then
-
-                client.message channel: data.channel, text: "Thank you!"
-                # TODO: put report into DB here
-                reports.each do |r|
-                  p r
-                end
-                started = false
-                current_step = nil
+          if report = reports[data.channel]
+            if report[:started] # TODO: Chech that daily report already exist
+              case report[:current_step]
+                when nil then
+                  client.message channel: data.channel, text: FIRST_STEP
+                  report[:current_step] = FIRST_STEP
+                when FIRST_STEP then
+                  client.message channel: data.channel, text: SECOND_STEP
+                  report[:current_step] = SECOND_STEP
+                when SECOND_STEP then
+                  client.message channel: data.channel, text: THIRD_STEP
+                  report[:current_step] = THIRD_STEP
+                when THIRD_STEP then
+                  client.message channel: data.channel, text: "Thank you!"
+                  # TODO: put report into DB here
+                  p report
+                  report[:started] = false
+                  report[:current_step] = nil
+                  report[:report] = {}
+              end
             end
           end
         else
-          if started && current_step
-            if started
-              report = reports.detect { |o| o[:channel] == data.channel }
-              unless report
-                report = { channel: data.channel }
-                reports << report
-              end
-              report[current_step] = [] if report[current_step].nil?
-              report[current_step] << data.text
+          if report = reports[data.channel]
+            if report[:started] && (current_step = report[:current_step])
+              report[:report][current_step] = [] if report[:report][current_step].nil?
+              report[:report][current_step] << data.text
             end
           end
       end
