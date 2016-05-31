@@ -2,11 +2,12 @@ require 'rufus-scheduler'
 
 class SlackWorker
 
+  include Sidekiq::Worker
+  sidekiq_options queue: "slack"
+
   FIRST_STEP = 'Completed:'
   SECOND_STEP = 'Workin on:'
   THIRD_STEP = 'Any problems?'
-
-  include Sidekiq::Worker
 
   def perform()
     client = Slack::RealTime::Client.new
@@ -67,11 +68,11 @@ class SlackWorker
     end
 
     client.on :close do |_data|
-      puts "Client is about to disconnect"
+      p "Client is about to disconnect"
     end
 
     client.on :closed do |_data|
-      puts "Client has disconnected successfully!"
+      p "Client has disconnected successfully!"
     end
 
     client.start_async
