@@ -1,8 +1,8 @@
 require 'rufus-scheduler'
 
 class SlackWorker
-
   include Sidekiq::Worker
+
   sidekiq_options queue: "slack"
 
   FIRST_STEP = 'Completed:'
@@ -38,6 +38,9 @@ class SlackWorker
         when '-s' then
           client.message channel: data.channel, text: "Hi <@#{data.user}>! Lets start the standup! Enter -n to start or go to the next step"
           started = true
+        when '-r' then
+          Slackbot::Register.call({ client: client, data: data })
+          #SlackBotHelper::Register.register(client, data)
         when '-n' then
           if started # TODO: Chech that daily report already exist
             case current_step

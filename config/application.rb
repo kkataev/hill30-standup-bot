@@ -24,7 +24,8 @@ module Hill30StandupBot
     config.active_record.raise_in_transactional_callbacks = true
 
     config.autoload_paths += [
-        "#{config.root}/app/workers"
+        "#{config.root}/app/workers",
+        "#{config.root}/app/interactors/slackbot"
     ]
 
   end
