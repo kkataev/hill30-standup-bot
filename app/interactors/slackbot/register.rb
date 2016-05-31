@@ -46,6 +46,8 @@ class Slackbot::Register
     end
 
     output "You have been registered successfully!"
+    output "You may reset/restore your password via report web site."
+    output "Also it's worth to delete your previous message containing your password."
     context.saved = true
     return
 
