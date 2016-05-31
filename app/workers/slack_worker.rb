@@ -11,6 +11,7 @@ class SlackWorker
 
   def perform()
     client = Slack::RealTime::Client.new
+    webClient = Slack::Web::Client.new
     scheduler = Rufus::Scheduler.new
 
     reports = {}
@@ -47,7 +48,7 @@ class SlackWorker
             client.message channel: data.channel, text: "Hi <@#{data.user}>! Lets start the standup! Enter -n to start or go to the next step"
           end
         when '-r' then
-          Slackbot::Register.call({ client: client, data: data })
+          Slackbot::Register.call({ client: client, webClient: webClient, data: data })
         when '-n' then
           if report = reports[data.channel]
             if report[:started] # TODO: Chech that daily report already exist
