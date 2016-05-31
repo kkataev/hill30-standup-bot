@@ -51,3 +51,4 @@ gem 'celluloid-io', require: ['celluloid/current', 'celluloid/io']
 gem 'sidekiq'
 gem 'devise'
 gem 'rufus-scheduler'
+gem "interactor", "~> 3.0"
