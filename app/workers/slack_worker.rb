@@ -56,7 +56,7 @@ class SlackWorker
           end
         when '-r' then
           result = Slackbot::Register.call({ client: client, webClient: webClient, data: data })
-          if result.readyToPassword
+          if result.ready_to_password
             current_user[:ready_to_password] = true
           end
         when '-n' then

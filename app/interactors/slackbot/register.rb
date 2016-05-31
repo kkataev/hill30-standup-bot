@@ -1,13 +1,12 @@
-class Slackbot::Register
+class Slackbot::Save
   include Interactor
 
+  def output(text)
+    p text
+    context.client.message channel: context.data.channel, text: text
+  end
+
   def call
-
-    def output(text)
-      puts text
-      context.client.message channel: context.data.channel, text: text
-    end
-
     user = nil
     email = nil
     name = context.data.user
@@ -21,15 +20,15 @@ class Slackbot::Register
       return false
     end
 
-    dbUser = User.find_by(email: email)
-    if dbUser
+    db_user = 
+    if db_user = User.find_by(email: email)
       output "Can't register. You are already registered."
       return false
     end
 
     if pass.blank?
       output "Enter your password."
-      context.readyToPassword = true
+      context.ready_to_password = true
       return
     end
 
@@ -38,8 +37,8 @@ class Slackbot::Register
       return
     end
 
-    dbUser = User.new({:email => email, :password => pass, :password_confirmation => pass})
-    unless dbUser.save
+    db_user = User.new({:email => email, :password => pass, :password_confirmation => pass})
+    unless db_user.save
       output "Can't save a new user to DB."
       #context.fail!(error: { })
       return
@@ -50,6 +49,6 @@ class Slackbot::Register
     output "Also it's worth to delete your previous message containing your password."
     context.saved = true
     return
-
   end
+
 end
