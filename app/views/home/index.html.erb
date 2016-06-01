@@ -1,25 +1,16 @@
-
-
-
-
 <!-- Simple header with fixed tabs. -->
 <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header mdl-layout--fixed-tabs">
   <header class="mdl-layout__header">
-    <div class="mdl-layout__header-row">
-      <span class="mdl-layout-title"></span>
-    </div>
-    <div class="mdl-layout__tab-bar mdl-js-ripple-effect">
+    <div class="mdl-layout__tab-bar">
       <a class="mdl-layout__tab" href="?date=<%=  @date-1 %>"> < </a>
-      <a href="#fixed-tab-2" class="mdl-layout__tab is-active"><%= @date.to_formatted_s(:long)%></a>
-      <a class="mdl-layout__tab"  href="?date=<%=  @date == Date.today ? @date : @date+1 %>#fixed-tab-2"> > </a>
+      <a class="mdl-layout__tab"><%= @date.to_formatted_s(:long)%></a>
+      <a class="mdl-layout__tab"  href="?date=<%=  @date == Date.today ? @date : @date+1 %>"> > </a>
     </div>
   </header>
 
-  </div-->
   <main class="mdl-layout__content">
     <section class="mdl-layout__tab-panel  is-active" id="fixed-tab-2">
       <div class="page-content">
-
         <div class="mdl-grid">
           <% @reports.each do |r|  %>
             <div class="mdl-cell mdl-cell--4-col">
@@ -41,10 +32,18 @@
             </div>
           <% end %>
         </div>
-
-
-
       </div>
     </section>
   </main>
 </div>
+
+<% if user_signed_in?%>
+<a  href="/users/sign_out"
+    target="_blank" id="view-source"
+    class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-color--accent mdl-color-text--white"
+    data-upgraded=",MaterialButton,MaterialRipple"> Sign Out<span class="mdl-button__ripple-container">
+  <span class="mdl-ripple is-animating" style="width: 255.952px; height: 255.952px; transform: translate(-50%, -50%) translate(26px, 19px);">
+  </span>
+</span>
+</a>
+<% end %>
