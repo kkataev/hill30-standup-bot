@@ -20,7 +20,8 @@ class SlackWorker
       p "Successfully connected, welcome '#{client.self.name}' to the '#{client.team.name}' team at https://#{client.team.domain}.slack.com."
       # right now set to every minute
       # for example every working day at 15:30 will be 30 15 * * 1-5
-      scheduler.cron '20 16 * * 1-5' do
+      #scheduler.cron '20 16 * * 1-5' do
+      scheduler.cron '* * * * *' do
         # TODO: send daily reminder here
         p 'Hello... Rufus'
         p Time.now
