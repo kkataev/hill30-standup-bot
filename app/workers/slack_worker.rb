@@ -75,7 +75,16 @@ class SlackWorker
                 when THIRD_STEP then
                   client.message channel: data.channel, text: "Thank you!"
                   # TODO: put report into DB here
-                  p current_user
+                  user = webClient.users_info(user: data.user)
+                  p user['user']['profile']['email']
+
+                  resp = Slackbot::Save.call({
+                    email: user['user']['profile']['email'],
+                    report: {
+                      description: current_user[:report].to_json
+                    }
+                  })
+                  p resp
                   current_user[:started] = false
                   current_user[:current_step] = nil
                   current_user[:report] = {}

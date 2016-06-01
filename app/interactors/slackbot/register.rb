@@ -1,4 +1,4 @@
-class Slackbot::Save
+class Slackbot::Register
   include Interactor
 
   def output(text)
@@ -20,7 +20,6 @@ class Slackbot::Save
       return false
     end
 
-    db_user = 
     if db_user = User.find_by(email: email)
       output "Can't register. You are already registered."
       return false
