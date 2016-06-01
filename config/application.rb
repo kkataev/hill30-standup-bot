@@ -25,7 +25,8 @@ module Hill30StandupBot
 
     config.autoload_paths += [
         "#{config.root}/app/workers",
-        "#{config.root}/app/interactors/slackbot"
+        "#{config.root}/app/workers/slackbot"
+        # "#{config.root}/app/interactors/slackbot"
     ]
 
   end
