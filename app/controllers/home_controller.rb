@@ -7,7 +7,7 @@ class HomeController < ApplicationController
     else
       @date = Date.today
     end
-    @reports = DailyReport.where(created_at: @date.midnight..@date.end_of_day).select([:user_id, :id, :description, 'MAX(created_at)']).group(:user_id, :id)
+    @reports = DailyReport.where(created_at: @date.midnight..@date.end_of_day).select("DISTINCT ON(user_id) *").order("user_id, created_at DESC")
   end
 
 end
