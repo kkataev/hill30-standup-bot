@@ -6,7 +6,7 @@ class SlackWorker
   sidekiq_options queue: "slack"
 
   FIRST_STEP = 'Completed:'
-  SECOND_STEP = 'Workin on:'
+  SECOND_STEP = 'Working on:'
   THIRD_STEP = 'Any problems?'
 
   def perform()
