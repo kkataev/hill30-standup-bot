@@ -30,6 +30,8 @@ class SlackWorker
 
     client.on :message do |data|
 
+      p data.user + ": " + data.text
+
       unless users[data.channel]
         users[data.channel] = {
           ready_to_password: false,
@@ -39,64 +41,55 @@ class SlackWorker
         }
       end
 
-      p users
-
       current_user = users[data.channel]
+      context = { client: client, webClient: webClient, data: data }
 
       case data.text
         when '-h' then
-          client.message channel: data.channel, text: "hill30-standup-bot help:
+          Slackbot::Message.send context, "hill30-standup-bot help:
   -h help
   -r register
   -s start daily report
   -n next report statement"
+        when '-t'
+          Slackbot::Message.send context, "Test passed."
         when '-s' then
           if current_user
             current_user[:started] = true
-            client.message channel: data.channel, text: "Hi <@#{data.user}>! Lets start the standup! Enter -n to start or go to the next step"
+              Slackbot::Message.send context, "Hi <@#{data.user}>! Lets start the standup! Enter -n to start or go to the next step"
           end
         when '-r' then
-          result = Slackbot::Register.call({ client: client, webClient: webClient, data: data })
-          if result.ready_to_password
+          if Slackbot::Auth.doRegisterStart context
             current_user[:ready_to_password] = true
+            Slackbot::Message.send context, "Please enter your password." 
           end
         when '-n' then
           if current_user
             if current_user[:started] # TODO: Check that daily report already exist
               case current_user[:current_step]
                 when nil then
-                  client.message channel: data.channel, text: FIRST_STEP
+                  Slackbot::Message.send context, FIRST_STEP
                   current_user[:current_step] = FIRST_STEP
                 when FIRST_STEP then
-                  client.message channel: data.channel, text: SECOND_STEP
+                  Slackbot::Message.send context, SECOND_STEP
                   current_user[:current_step] = SECOND_STEP
                 when SECOND_STEP then
-                  client.message channel: data.channel, text: THIRD_STEP
+                  Slackbot::Message.send context, THIRD_STEP
                   current_user[:current_step] = THIRD_STEP
                 when THIRD_STEP then
-                  client.message channel: data.channel, text: "Thank you!"
-                  # TODO: put report into DB here
-                  user = webClient.users_info(user: data.user)
-                  p user['user']['profile']['email']
-
-                  resp = Slackbot::Save.call({
-                    email: user['user']['profile']['email'],
-                    report: {
-                      description: current_user[:report].to_json
-                    }
-                  })
-                  p resp
-                  current_user[:started] = false
-                  current_user[:current_step] = nil
-                  current_user[:report] = {}
+                  if result = Slackbot::Report.save(context, current_user[:report])
+                    p result
+                    current_user[:started] = false
+                    current_user[:current_step] = nil
+                    current_user[:report] = {}
+                  end
               end
             end
           end
         else
           if current_user
             if current_user[:ready_to_password]
-              result = Slackbot::Register.call({ client: client, webClient: webClient, data: data, password: data.text })
-              if result.saved
+              if Slackbot::Auth.doRegister context, data.text
                 current_user[:ready_to_password] = false
               end
             end
