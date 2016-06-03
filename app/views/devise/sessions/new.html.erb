@@ -1,4 +1,4 @@
-  <style type="text/css">
+<style type="text/css">
   .form-custom {
     width: 350px;
     box-sizing: border-box;
@@ -28,26 +28,27 @@
     background-color: #fff !important;
     transition: background-color 5000s ease-in-out 0s;
   }
-
-  </style>
+</style>
 
 <div class="form-custom">
   <%= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
     <div class="mdl-textfield--wrapper">
       <div class="mdl-textfield mdl-js-textfield">
         <%= f.email_field :email, placeholder: "email", autofocus: false, class: "mdl-textfield__input"  %>
-        <!--label class="mdl-textfield__label" for="email">Email</label-->
       </div>
     </div>
     <div class="mdl-textfield--wrapper">
       <div class="mdl-textfield mdl-js-textfield">
         <%= f.password_field :password, placeholder: "password", autocomplete: "off", class: "mdl-textfield__input" %>
-        <!--label class="mdl-textfield__label" for="password">Password</label-->
       </div>
     </div>
-    <!--div class="msg-error-wrapper">
-      <div class="">Error</div>
-    </div-->
+    <%  if flash[:alert].present?  %>
+      <div class="msg-error-wrapper">
+        <div class="msg-error">
+          <%= content_tag(:p, flash[:alert])%>
+        </div>
+      </div>
+    <% end %>
     <div class="button-wrapper">
       <%= f.submit "Log in", class: "mdl-button mdl-js-button mdl-button--raised mdl-button--colored" %>
     </div>
