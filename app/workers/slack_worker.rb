@@ -8,6 +8,11 @@ class SlackWorker
   FIRST_STEP = 'Completed:'
   SECOND_STEP = 'Working on:'
   THIRD_STEP = 'Any problems?'
+  HELP_MESSAGE = 'hill30-standup-bot help:
+-h help
+-r register
+-s start daily report
+-n next report statement'
 
   def perform()
     client = Slack::RealTime::Client.new
@@ -18,13 +23,21 @@ class SlackWorker
 
     client.on :hello do
       p "Successfully connected, welcome '#{client.self.name}' to the '#{client.team.name}' team at https://#{client.team.domain}.slack.com."
-      # right now set to every minute
-      # for example every working day at 15:30 will be 30 15 * * 1-5
-      #scheduler.cron '20 16 * * 1-5' do
-      scheduler.cron '* * * * *' do
+      scheduler.cron '00 10,11,12,14 * * 1-5' do
+        User.where(enabled: true).each do |u|
+          unless u.daily_reports.where(created_at: Date.today.midnight..Date.today.end_of_day).exists?
+            channel = webClient.users_info(user:"@#{u.email.split("@")[0]}")['user']['id']
+            p "#{u.email} - #{channel}"
+            #if u.email == 'kivanov@hill30.com'
+            webClient.chat_postMessage(channel: channel, text: "Time to daily report! #{ HELP_MESSAGE }", as_user: true)
+            #end
+          end
+         end
+      end
+
+      scheduler.cron '*/3 * * * *' do
         # TODO: send daily reminder here
-        p 'Hello... Rufus'
-        p Time.now
+        p "ping #{ Time.now }"
       end
     end
 
@@ -46,11 +59,7 @@ class SlackWorker
 
       case data.text
         when '-h' then
-          Slackbot::Message.send context, "hill30-standup-bot help:
-  -h help
-  -r register
-  -s start daily report
-  -n next report statement"
+          Slackbot::Message.send context, HELP_MESSAGE
         when '-t'
           Slackbot::Message.send context, "Test passed."
         when '-s' then
@@ -61,7 +70,7 @@ class SlackWorker
         when '-r' then
           if Slackbot::Auth.doRegisterStart context
             current_user[:ready_to_password] = true
-            Slackbot::Message.send context, "Please enter your password." 
+            Slackbot::Message.send context, "Please enter your password."
           end
         when '-n' then
           if current_user
