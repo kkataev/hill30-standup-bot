@@ -41,7 +41,7 @@ class Slackbot::Auth
       return
     end
 
-    db_user = User.new({:email => email, :password => password, :password_confirmation => password})
+    db_user = User.new({:email => email, :password => password, :password_confirmation => password, enabled: true})
     unless db_user.save
       Slackbot::Message.send(context, "Can't save a new user to DB.")
     end

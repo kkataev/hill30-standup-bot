@@ -3,6 +3,11 @@ class Slackbot::Workflow
   FIRST_STEP = 'Completed:'
   SECOND_STEP = 'Working on:'
   THIRD_STEP = 'Any problems?'
+  HELP_MESSAGE = 'hill30-standup-bot help:
+  -h help
+  -r register
+  -s start daily report
+  -n next report statement'
 
 
   def self.doTest(context)
@@ -11,11 +16,7 @@ class Slackbot::Workflow
 
 
   def self.doHelp(context)
-    Slackbot::Message.send context, "hill30-standup-bot help:
-  -h help
-  -r register
-  -s start daily report
-  -n next report statement"
+    Slackbot::Message.send context, HELP_MESSAGE
   end
 
 

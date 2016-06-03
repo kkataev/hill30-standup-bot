@@ -5,4 +5,11 @@ class User < ActiveRecord::Base
          :recoverable, :rememberable, :trackable, :validatable
 
   has_many :daily_reports
+
+  scope :without_daily_report, -> {
+    includes(:daily_reports)
+    .where(users: { enabled: true })
+    .where.not.(daily_reports: {created_at: Date.today.midnight..Date.today.end_of_day })
+  }
+
 end
