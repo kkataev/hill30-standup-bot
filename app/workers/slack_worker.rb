@@ -30,7 +30,8 @@ class SlackWorker
 
       unless users[data.channel]
         users[data.channel] = {
-          ready_to_password: false,
+          ready_to_set_password: false,
+          ready_to_select_team: false,
           started: false,
           current_step: nil,
           report: {}
@@ -38,6 +39,11 @@ class SlackWorker
       end
 
       context = { client: client, webClient: webClient, data: data, user: users[data.channel] }
+
+      if context[:user][:ready_to_set_password]
+        Slackbot::Workflow.doSetPassword context
+        next
+      end
 
       case data.text
         when '-t' then Slackbot::Workflow.doTest context
@@ -47,7 +53,7 @@ class SlackWorker
         when '-n' then Slackbot::Workflow.doNextReportStatement context
         else Slackbot::Workflow.doDefault context
       end
-      
+
     end
 
     client.on :close do |_data|

@@ -21,7 +21,7 @@ class Slackbot::Workflow
 
   def self.doRegister(context)
     if Slackbot::Auth.doRegisterStart context
-      context[:user][:ready_to_password] = true
+      context[:user][:ready_to_set_password] = true
       Slackbot::Message.send context, "Please enter your password."
     end
   end
@@ -61,14 +61,18 @@ class Slackbot::Workflow
   end
 
 
+  def self.doSetPassword(context)
+    if user = context[:user]
+      if Slackbot::Auth.doRegister context, context[:data].text
+        user[:ready_to_set_password] = false
+      end
+    end
+  end
+
+
   def self.doDefault(context)
     if user = context[:user]
-      if user[:ready_to_password]
-        if Slackbot::Auth.doRegister context, context[:data].text
-          user[:ready_to_password] = false
-        end
-      end
-      if !user[:ready_to_password] && user[:started] && (current_step = user[:current_step])
+      if user[:started] && (current_step = user[:current_step])
         user[:report][current_step] = [] if user[:report][current_step].nil?
         user[:report][current_step] << context[:data].text
       end
