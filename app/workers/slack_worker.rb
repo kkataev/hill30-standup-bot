@@ -5,15 +5,6 @@ class SlackWorker
 
   sidekiq_options queue: "slack"
 
-  FIRST_STEP = 'Completed:'
-  SECOND_STEP = 'Working on:'
-  THIRD_STEP = 'Any problems?'
-  HELP_MESSAGE = 'hill30-standup-bot help:
--h help
--r register
--s start daily report
--n next report statement'
-
   def perform()
     client = Slack::RealTime::Client.new
     webClient = Slack::Web::Client.new
@@ -47,17 +38,30 @@ class SlackWorker
 
       unless users[data.channel]
         users[data.channel] = {
-          ready_to_password: false,
+          ready_to_set_password: false,
+          ready_to_select_team: false,
           started: false,
           current_step: nil,
           report: {}
         }
       end
 
-      current_user = users[data.channel]
-      context = { client: client, webClient: webClient, data: data }
+      context = { client: client, webClient: webClient, data: data, user: users[data.channel] }
+
+      if context[:user][:ready_to_set_password]
+        Slackbot::Workflow.doSetPassword context
+        next
+      end
 
       case data.text
+<<<<<<< HEAD
+        when '-t' then Slackbot::Workflow.doTest context
+        when '-h' then Slackbot::Workflow.doHelp context
+        when '-r' then Slackbot::Workflow.doRegister context
+        when '-s' then Slackbot::Workflow.doStartReport context
+        when '-n' then Slackbot::Workflow.doNextReportStatement context
+        else Slackbot::Workflow.doDefault context
+=======
         when '-h' then
           Slackbot::Message.send context, HELP_MESSAGE
         when '-t'
@@ -107,7 +111,9 @@ class SlackWorker
               current_user[:report][current_step] << data.text
             end
           end
+>>>>>>> 2f5294c020a7faad6c92b008fb6cf83c18339b95
       end
+
     end
 
     client.on :close do |_data|

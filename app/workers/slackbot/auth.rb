@@ -37,14 +37,13 @@ class Slackbot::Auth
       return
     end
     if password.length < 6
-      Slackbot::Message.send(context, "Password must have at least 6 symbols.")
+      Slackbot::Message.send(context, "Password must have at least 6 symbols. Enter your password.")
       return
     end
 
     db_user = User.new({:email => email, :password => password, :password_confirmation => password, enabled: true})
     unless db_user.save
       Slackbot::Message.send(context, "Can't save a new user to DB.")
-      return false
     end
 
     Slackbot::Message.send(context, "You have been registered successfully!
