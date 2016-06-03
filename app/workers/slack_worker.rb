@@ -40,6 +40,7 @@ class SlackWorker
         users[data.channel] = {
           ready_to_set_password: false,
           ready_to_select_team: false,
+          team: nil,
           started: false,
           current_step: nil,
           report: {}
@@ -50,6 +51,11 @@ class SlackWorker
 
       if context[:user][:ready_to_set_password]
         Slackbot::Workflow.doSetPassword context
+        next
+      end
+
+      if context[:user][:ready_to_select_team]
+        Slackbot::Workflow.doSelectTeam context
         next
       end
 

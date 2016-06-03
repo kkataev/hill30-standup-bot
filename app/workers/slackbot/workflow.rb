@@ -1,8 +1,8 @@
 class Slackbot::Workflow
 
-  FIRST_STEP = 'Completed:'
-  SECOND_STEP = 'Working on:'
-  THIRD_STEP = 'Any problems?'
+  FIRST_STEP = 'What has been done? || -n to next statement'
+  SECOND_STEP = 'What are you working on? || -n to next statement'
+  THIRD_STEP = 'Any problems? || -n to finish'
   HELP_MESSAGE = 'hill30-standup-bot help:
   -h help
   -r register
@@ -29,9 +29,12 @@ class Slackbot::Workflow
 
 
   def self.doStartReport(context)
-    if context[:user]
-      context[:user][:started] = true
-        Slackbot::Message.send context, "Hi <@#{context[:data].user}>! Lets start the standup! Enter -n to start or go to the next step"
+    if user = context[:user]
+      user[:started] = true
+        Slackbot::Message.send context, "Hi <@#{context[:data].user}>! Lets start the standup!"
+        if Slackbot::Teams.outputList context
+          user[:ready_to_select_team] = true
+        end
     end
   end
 
@@ -40,9 +43,6 @@ class Slackbot::Workflow
     if user = context[:user]
       if user[:started] # TODO: Check that daily report already exist
         case user[:current_step]
-          when nil then
-            Slackbot::Message.send context, FIRST_STEP
-            user[:current_step] = FIRST_STEP
           when FIRST_STEP then
             Slackbot::Message.send context, SECOND_STEP
             user[:current_step] = SECOND_STEP
@@ -50,7 +50,7 @@ class Slackbot::Workflow
             Slackbot::Message.send context, THIRD_STEP
             user[:current_step] = THIRD_STEP
           when THIRD_STEP then
-            if result = Slackbot::Report.save(context, user[:report])
+            if result = Slackbot::Report.save(context, user[:team], user[:report])
               p result
               user[:started] = false
               user[:current_step] = nil
@@ -67,6 +67,19 @@ class Slackbot::Workflow
       if Slackbot::Auth.doRegister context, context[:data].text
         user[:ready_to_set_password] = false
       end
+    end
+  end
+
+
+  def self.doSelectTeam(context)
+    if user = context[:user]
+       if team = Slackbot::Teams.select(context, context[:data].text)
+         user[:team] = team
+         user[:current_step] = FIRST_STEP
+         Slackbot::Message.send context, FIRST_STEP
+         user[:ready_to_select_team] = false
+         user[:current_step] = FIRST_STEP
+       end
     end
   end
 
