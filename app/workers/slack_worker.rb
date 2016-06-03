@@ -54,64 +54,12 @@ class SlackWorker
       end
 
       case data.text
-<<<<<<< HEAD
         when '-t' then Slackbot::Workflow.doTest context
         when '-h' then Slackbot::Workflow.doHelp context
         when '-r' then Slackbot::Workflow.doRegister context
         when '-s' then Slackbot::Workflow.doStartReport context
         when '-n' then Slackbot::Workflow.doNextReportStatement context
         else Slackbot::Workflow.doDefault context
-=======
-        when '-h' then
-          Slackbot::Message.send context, HELP_MESSAGE
-        when '-t'
-          Slackbot::Message.send context, "Test passed."
-        when '-s' then
-          if current_user
-            current_user[:started] = true
-              Slackbot::Message.send context, "Hi <@#{data.user}>! Lets start the standup! Enter -n to start or go to the next step"
-          end
-        when '-r' then
-          if Slackbot::Auth.doRegisterStart context
-            current_user[:ready_to_password] = true
-            Slackbot::Message.send context, "Please enter your password."
-          end
-        when '-n' then
-          if current_user
-            if current_user[:started] # TODO: Check that daily report already exist
-              case current_user[:current_step]
-                when nil then
-                  Slackbot::Message.send context, FIRST_STEP
-                  current_user[:current_step] = FIRST_STEP
-                when FIRST_STEP then
-                  Slackbot::Message.send context, SECOND_STEP
-                  current_user[:current_step] = SECOND_STEP
-                when SECOND_STEP then
-                  Slackbot::Message.send context, THIRD_STEP
-                  current_user[:current_step] = THIRD_STEP
-                when THIRD_STEP then
-                  if result = Slackbot::Report.save(context, current_user[:report])
-                    p result
-                    current_user[:started] = false
-                    current_user[:current_step] = nil
-                    current_user[:report] = {}
-                  end
-              end
-            end
-          end
-        else
-          if current_user
-            if current_user[:ready_to_password]
-              if Slackbot::Auth.doRegister context, data.text
-                current_user[:ready_to_password] = false
-              end
-            end
-            if !current_user[:ready_to_password] && current_user[:started] && (current_step = current_user[:current_step])
-              current_user[:report][current_step] = [] if current_user[:report][current_step].nil?
-              current_user[:report][current_step] << data.text
-            end
-          end
->>>>>>> 2f5294c020a7faad6c92b008fb6cf83c18339b95
       end
 
     end
