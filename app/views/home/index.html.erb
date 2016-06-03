@@ -17,12 +17,14 @@
             </div>
             <div class="mdl-card__supporting-text">
               <% JSON.parse(r.description).each do |k,v| %>
-                <b><%= k %></b><hr>
-                <ul class='mdl-list'>
-                  <% v.each do |message| %>
-                    <li class=""> - <%= message %> </li>
-                  <% end %>
-                </ul>
+                <% if v.present? %>
+                  <b><%= k %></b><hr>
+                  <ul class='mdl-list'>
+                    <% v.each do |message| %>
+                      <li class=""> - <%= message %> </li>
+                    <% end %>
+                  </ul>
+                <% end %>
               <% end %>
             </div>
           </div>
