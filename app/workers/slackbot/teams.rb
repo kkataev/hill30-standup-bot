@@ -41,7 +41,7 @@ class Slackbot::Teams
       team = teams[index]
       team[:name]
     rescue
-      Slackbot::Message.send(context, "Error. Can't get team.")
+      Slackbot::Message.send(context, "Error. Can't get team. Standup canceled.")
       return false
     end
 

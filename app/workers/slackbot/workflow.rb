@@ -77,9 +77,9 @@ class Slackbot::Workflow
          user[:team] = team
          user[:current_step] = FIRST_STEP
          Slackbot::Message.send context, FIRST_STEP
-         user[:ready_to_select_team] = false
          user[:current_step] = FIRST_STEP
        end
+       user[:ready_to_select_team] = false
     end
   end
 
