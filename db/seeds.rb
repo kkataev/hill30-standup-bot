@@ -1,3 +1,22 @@
+
+### Teams creation ###
+
+teams_amount = 3
+
+(1..teams_amount).each do |i|
+  team = nil
+
+  if found = Team.find_by(name: "Test Team №#{i}")
+    team = found
+  else
+    team = Team.create!({
+      :name => "Test Team №#{i}"
+    })
+  end
+end
+
+### Users creation ###
+
 unless User.find_by(email: 'admin@example.com')
   User.create!({
     :email => 'admin@example.com',
@@ -19,26 +38,14 @@ end
     })
   end
 
+  ### Reports creation ###
+
   data = {
     "Completed:": Faker::Lorem.sentences((0..5).to_a.sample),
     "Working on:": Faker::Lorem.sentences((1..5).to_a.sample),
     "Any problems?": Faker::Lorem.sentences((0..5).to_a.sample)
   }
   user.daily_reports.destroy_all
-  user.daily_reports.create!(description: data.to_json, created_at: Date.today-5 )
-end
+  user.daily_reports.create!(team_id: rand(1..teams_amount), description: data.to_json, created_at: Date.today-5 )
 
-
-### Teams creation ###
-
-(1..3).each do |i|
-  team = nil
-
-  if found = Team.find_by(name: "Test Team №#{i}")
-    team = found
-  else
-    team = Team.create!({
-      :name => "Test Team №#{i}"
-    })
-  end
 end
