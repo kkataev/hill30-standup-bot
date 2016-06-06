@@ -12,14 +12,14 @@ class Slackbot::Auth
     return email
   end
 
-  def self.getAuthenticatedUser(context)
+  def self.getRegisteredUser(context)
     email = self.getEmailFromContext(context)
     return false if email.blank?
     return User.find_by(email: email)
   end
 
   def self.doRegisterStart(context)
-    user = self.getAuthenticatedUser(context)
+    user = self.getRegisteredUser(context)
     if user
       Slackbot::Message.send(context, "Can't register. You are already registered.")
       return false

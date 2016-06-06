@@ -35,6 +35,7 @@ class SlackWorker
 
       unless users[data.channel]
         users[data.channel] = {
+          registered: false,
           ready_to_set_password: false,
           ready_to_select_team: false,
           team: nil,
