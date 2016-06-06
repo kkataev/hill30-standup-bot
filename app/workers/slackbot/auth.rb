@@ -27,8 +27,9 @@ class Slackbot::Auth
     return user.nil?
   end
 
-  def self.doRegister(context, password)
+  def self.doRegister(context)
     email = self.getEmailFromContext(context)
+    password = context[:data].text
 
     return false if(email.blank? or not self.doRegisterStart(context))
 

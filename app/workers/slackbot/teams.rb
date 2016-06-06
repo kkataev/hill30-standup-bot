@@ -31,13 +31,13 @@ class Slackbot::Teams
     return true
   end
 
-  def self.select(context, text)
+  def self.select(context)
     teams = self.getTeams(context)
     return false if not teams
 
     team = nil
     begin
-      index = Integer(text) - 1
+      index = Integer(context[:data].text) - 1
       team = teams[index]
       team[:name]
     rescue

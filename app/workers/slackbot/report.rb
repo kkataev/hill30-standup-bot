@@ -1,8 +1,8 @@
 class Slackbot::Report
 
-  def self.save(context, team, report)
+  def self.save(context)
     if user = Slackbot::Auth.getAuthenticatedUser(context)
-      if result = user.daily_reports.create!({ team_id: team, description: report.to_json })
+      if result = user.daily_reports.create!({ team_id: context[:user][:team], description: context[:user][:report].to_json })
         Slackbot::Message.send context, "Thank you!"
         return result
       else
