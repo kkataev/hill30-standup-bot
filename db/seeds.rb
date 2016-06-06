@@ -27,3 +27,18 @@ end
   user.daily_reports.destroy_all
   user.daily_reports.create!(description: data.to_json, created_at: Date.today-5 )
 end
+
+
+### Teams creation ###
+
+(1..3).each do |i|
+  team = nil
+
+  if found = Team.find_by(name: "Test Team №#{i}")
+    team = found
+  else
+    team = Team.create!({
+      :name => "Test Team №#{i}"
+    })
+  end
+end
