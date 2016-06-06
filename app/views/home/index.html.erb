@@ -4,20 +4,21 @@ report_messages = [
   'Working on',
   'Problems'
 ];
+team_id = @team ? @team.id : nil
 %>
 
 <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header mdl-layout--fixed-tabs">
   <header class="mdl-layout__header">
     <div class="mdl-layout__tab-bar">
-      <a class="mdl-layout__tab" href="?date=<%=  @date-1 %>"> < </a>
+      <a class="mdl-layout__tab" href="?date=<%= @date - 1 %>&team=<%= team_id %>"> < </a>
       <a class="mdl-layout__tab"><%= @date.to_formatted_s(:long)%></a>
-      <a class="mdl-layout__tab"  href="?date=<%=  @date == Date.today ? @date : @date+1 %>"> > </a>
+      <a class="mdl-layout__tab"  href="?date=<%= @date == Date.today ? @date : @date + 1 %>&team=<%= team_id %>"> > </a>
     </div>
     <div>
-      <ul>
+      <ul class="teams">
         <% @teams.each do |t| %>
-          <li value="t.id" <%= @team && t.id == @team.id ? 'class="selected"' : '' %>>
-            <a href="?date=<%=  @date %>&team=<%= t.id%>">
+          <li value="t.id" <%= @team && t.id == @team.id ? "class=selected" : '' %>>
+            <a href="?date=<%=  @date %>&team=<%= t.id %>">
               <%= t.name %>
             </a>
           </li>
@@ -29,7 +30,7 @@ report_messages = [
   <main class="mdl-layout__content">
 
     <% if @reports.blank? %>
-    <div>
+    <div class="empty">
       <% if not @team %>
         Team must be specified.
       <% else %>

@@ -13,3 +13,30 @@
  *= require_tree .
  *= require_self
  */
+.empty {
+  margin: 15px;
+}
+
+ul.teams {
+  width: 100%;
+  list-style-type: none;
+  margin: 10px;
+  padding: 0;
+}
+
+ul.teams li {
+  float: left;
+  margin-right: 10px;
+}
+
+ul.teams li:last-child {
+  float: none;
+}
+
+ul.teams li a {
+  color: white;
+}
+
+ul.teams li.selected a {
+  color: yellow;
+}
