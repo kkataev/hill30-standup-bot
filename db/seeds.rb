@@ -41,9 +41,9 @@ end
   ### Reports creation ###
 
   data = {
-    "Completed:": Faker::Lorem.sentences((0..5).to_a.sample),
-    "Working on:": Faker::Lorem.sentences((1..5).to_a.sample),
-    "Any problems?": Faker::Lorem.sentences((0..5).to_a.sample)
+    "0": Faker::Lorem.sentences((0..5).to_a.sample),
+    "1": Faker::Lorem.sentences((1..5).to_a.sample),
+    "2": Faker::Lorem.sentences((0..5).to_a.sample)
   }
   user.daily_reports.destroy_all
   user.daily_reports.create!(team_id: rand(1..teams_amount), description: data.to_json, created_at: Date.today-5 )
