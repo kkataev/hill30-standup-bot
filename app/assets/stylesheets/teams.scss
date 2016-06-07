@@ -2,6 +2,52 @@
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
+/*login-form*/
+.signin-form {
+  width: 350px;
+  box-sizing: border-box;
+  border: 1px hsl(0,0%,80%) solid;
+  padding: 25px;
+  border-radius: 6px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%,-50%);
+
+  .form-group {
+    margin: 15px 0 0 0;
+
+    &:first-of-type {
+      margin-top: 1px;
+    }
+  }
+}
+
+.msg-error-wrapper {
+  min-height: 36px;
+  padding: 4px 0;
+
+  .msg-error {
+    color: #f00;
+    padding: 4px 10px;
+    background: rgba(255,0,0,.07);
+    border-radius: 4px;
+
+    p {
+      margin: 0;
+    }
+  }
+}
+
+
+
+input:-webkit-autofill {
+  background-color: #fff !important;
+  transition: background-color 5000s ease-in-out 0s;
+}
+/*!login-form*/
+
+/*header*/
 header {
   background: hsl(0,0%,93%);
   padding: 30px 0;
@@ -22,9 +68,15 @@ header {
     }
   }
 }
+/*!header*/
 
+/*users*/
 .btn-group .selected {
   background: hsl(0,0%,80%) !important;
+}
+
+.empty {
+  text-align: center;
 }
 
 .users {
@@ -66,7 +118,4 @@ header {
     }
   }
 }
-
-.empty {
-  text-align: center;
-}
+/*!users*/

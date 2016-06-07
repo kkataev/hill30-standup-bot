@@ -79,11 +79,10 @@ team_id = @team ? @team.id : nil
       <div class="panel panel-default">
         <div class="panel-heading"><img src="http://placehold.it/50x50"> <%= r.user.email %></div>
         <div class="panel-body">
-
           <% JSON.parse(r.description).each do |k,v| %>
             <% if v.present? %>
             <div class="task">
-              <div class="task-title"><%= report_messages[k.to_i] %></div>
+              <div class="task-title"><%= report_messages[k.to_i] %>:</div>
               <ul>
                 <% v.each do |message| %>
                   <li class=""><%= message %> </li>
@@ -92,7 +91,6 @@ team_id = @team ? @team.id : nil
             </div>
             <% end %>
           <% end %>
-
         </div>
       </div>
       <% end %>

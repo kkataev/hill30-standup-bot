@@ -1,56 +1,20 @@
-<style type="text/css">
-  .form-custom {
-    width: 350px;
-    box-sizing: border-box;
-    border: 1px hsl(0,0%,90%) solid;
-    padding: 25px;
-    border-radius: 5px;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%,-50%);
-  }
-
-  .msg-error-wrapper {
-    min-height: 40px;
-    padding: 5px 0;
-    box-sizing: border-box;
-  }
-
-  .msg-error {
-    color: #f00;
-    padding: 4px 10px;
-    background: rgba(255,0,0,.07);
-    border-radius: 4px;
-  }
-
-  input:-webkit-autofill {
-    background-color: #fff !important;
-    transition: background-color 5000s ease-in-out 0s;
-  }
-</style>
-
-<div class="form-custom">
+<div class="signin-form">
   <%= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
-    <div class="mdl-textfield--wrapper">
-      <div class="mdl-textfield mdl-js-textfield">
-        <%= f.email_field :email, placeholder: "email", autofocus: false, class: "mdl-textfield__input"  %>
-      </div>
+    <div class="form-group">
+      <%= f.email_field :email, placeholder: "email", autofocus: false, class: "form-control"  %>
     </div>
-    <div class="mdl-textfield--wrapper">
-      <div class="mdl-textfield mdl-js-textfield">
-        <%= f.password_field :password, placeholder: "password", autocomplete: "off", class: "mdl-textfield__input" %>
-      </div>
+    <div class="form-group">
+      <%= f.password_field :password, placeholder: "password", autocomplete: "off", class: "form-control" %>
     </div>
+    <div class="msg-error-wrapper">
     <%  if flash[:alert].present?  %>
-      <div class="msg-error-wrapper">
-        <div class="msg-error">
-          <%= content_tag(:p, flash[:alert])%>
-        </div>
+      <div class="msg-error">
+        <%= content_tag(:p, flash[:alert])%>
       </div>
     <% end %>
+    </div>
     <div class="button-wrapper">
-      <%= f.submit "Log in", class: "mdl-button mdl-js-button mdl-button--raised mdl-button--colored" %>
+      <%= f.submit "Log in", class: "btn btn-primary" %>
     </div>
   <% end %>
 </div>
