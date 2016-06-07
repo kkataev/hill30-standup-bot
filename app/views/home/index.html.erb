@@ -7,27 +7,62 @@ report_messages = [
 team_id = @team ? @team.id : nil
 %>
 
-<div class="mdl-layout mdl-js-layout mdl-layout--fixed-header mdl-layout--fixed-tabs">
-  <header class="mdl-layout__header">
-    <div class="mdl-layout__tab-bar">
-      <a class="mdl-layout__tab" href="?date=<%= @date - 1 %>&team=<%= team_id %>"> < </a>
-      <a class="mdl-layout__tab"><%= @date.to_formatted_s(:long)%></a>
-      <a class="mdl-layout__tab"  href="?date=<%= @date == Date.today ? @date : @date + 1 %>&team=<%= team_id %>"> > </a>
-    </div>
-    <div>
-      <ul class="teams">
-        <% @teams.each do |t| %>
-          <li value="t.id" <%= @team && t.id == @team.id ? "class=selected" : '' %>>
-            <a href="?date=<%=  @date %>&team=<%= t.id %>">
-              <%= t.name %>
-            </a>
-          </li>
-        <% end %>
-      </ul>
-    </div>
-  </header>
 
-  <main class="mdl-layout__content">
+<header>
+  <div class="container">
+    <div class="row">
+      <div class="col-xs-4">
+        <div class="btn-group">
+          <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Teams <span class="caret"></span>
+          </button>
+          <ul class="dropdown-menu">
+            <% @teams.each do |t| %>
+              <li value="t.id" <%= @team && t.id == @team.id ? "class=selected" : '' %>>
+                <a href="?date=<%=  @date %>&team=<%= t.id %>">
+                  <%= t.name %>
+                </a>
+              </li>
+            <% end %>
+          </ul>
+        </div>
+      </div>
+      <div class="col-xs-4">
+        <div class="pg">
+          <a class="btn btn-default" href="?date=<%= @date - 1 %>&team=<%= team_id %>">
+            <span class="glyphicon glyphicon-chevron-left"></span>
+          </a>
+          <div class="current-wrapper">
+            <div class="current"><%= @date.to_formatted_s(:long)%></div>
+            <a class="btn btn-default" href="#">
+              <span class="glyphicon glyphicon-calendar"></span>
+            </a>
+          </div>
+          <a class="btn btn-default" href="?date=<%= @date == Date.today ? @date : @date + 1 %>&team=<%= team_id %>">
+            <span class="glyphicon glyphicon-chevron-right"></span>
+          </a>
+        </div>
+      </div>
+      <div class="col-xs-4 ">
+        <% if user_signed_in? %>
+          <a href="/logout"
+              target="_blank" id="view-source"
+              class="pull-right btn btn-default"
+              data-upgraded=",MaterialButton,MaterialRipple">Log out
+              <span class="mdl-button__ripple-container">
+                <span class="mdl-ripple is-animating" style="width: 255.952px; height: 255.952px; transform: translate(-50%, -50%) translate(26px, 19px);">
+                </span>
+              </span>
+          </a>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</header>
+
+<div class="container">
+
+  <div class="users">
 
     <% if @reports.blank? %>
     <div class="empty">
@@ -40,42 +75,29 @@ team_id = @team ? @team.id : nil
     <% end %>
 
     <% if not @reports.blank? %>
-    <div class="mdl-grid">
       <% @reports.each do |r| %>
-        <div class="mdl-cell mdl-cell--4-col">
-          <div class="card-wide mdl-card mdl-shadow--2dp">
-            <div class="mdl-card__title">
-              <h2 class="mdl-card__title-text"> <%= r.user.email %> </h2>
-            </div>
-            <div class="mdl-card__supporting-text">
-              <% JSON.parse(r.description).each do |k,v| %>
-                <% if v.present? %>
-                  <b><%= report_messages[k.to_i] %></b><hr>
-                  <ul class='mdl-list'>
-                    <% v.each do |message| %>
-                      <li class=""> - <%= message %> </li>
-                    <% end %>
-                  </ul>
+      <div class="panel panel-default">
+        <div class="panel-heading"><img src="http://placehold.it/50x50"> <%= r.user.email %></div>
+        <div class="panel-body">
+
+          <% JSON.parse(r.description).each do |k,v| %>
+            <% if v.present? %>
+            <div class="task">
+              <div class="task-title"><%= report_messages[k.to_i] %></div>
+              <ul>
+                <% v.each do |message| %>
+                  <li class=""><%= message %> </li>
                 <% end %>
-              <% end %>
+              </ul>
             </div>
-          </div>
+            <% end %>
+          <% end %>
+
         </div>
+      </div>
       <% end %>
-    </div>
     <% end %>
 
-  </main>
-</div>
+  </div>
 
-<% if user_signed_in? %>
-  <a href="/logout"
-      target="_blank" id="view-source"
-      class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-color--accent mdl-color-text--white"
-      data-upgraded=",MaterialButton,MaterialRipple">Log out
-      <span class="mdl-button__ripple-container">
-        <span class="mdl-ripple is-animating" style="width: 255.952px; height: 255.952px; transform: translate(-50%, -50%) translate(26px, 19px);">
-        </span>
-      </span>
-  </a>
-<% end %>
+</div>
