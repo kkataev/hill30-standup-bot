@@ -18,7 +18,7 @@ class SlackWorker
         User.where(enabled: true).each do |u|
           unless u.daily_reports.where(created_at: Date.today.midnight..Date.today.end_of_day).exists?
             channel = webClient.users_info(user:"@#{u.email.split("@")[0]}")['user']['id']
-            webClient.chat_postMessage(channel: channel, text: "Time to daily report! #{ HELP_MESSAGE }", as_user: true)
+            webClient.chat_postMessage(channel: channel, text: "Time to daily report! #{ Slackbot::Workflow::HELP_MESSAGE }", as_user: true)
           end
         end
       end
