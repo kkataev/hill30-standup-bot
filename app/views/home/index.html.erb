@@ -6,26 +6,40 @@ report_messages = [
 ];
 team_id = @team ? @team.id : nil
 %>
+<script type="text/javascript">
+  $(function () {
+    $('#datetimepicker1').datetimepicker({
+      defaultDate: "<%=@date%>",
+      format: "MM/DD/YYYY"
+    }).on('dp.change', function (ev) {
+      location = "?date=" + ev.date.format("YYYY-MM-DD") + "&team=<%= team_id %>";
+    });
+  });
+</script>
 
 
 <header>
   <div class="container">
     <div class="row">
       <div class="col-xs-4">
-          Teams
-        <div class="btn-group">
-          <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            <%= @team ? @team.name : "" %> <span class="caret"></span>
-          </button>
-          <ul class="dropdown-menu">
-            <% @teams.each do |t| %>
-              <li value="t.id" <%= @team && t.id == @team.id ? "class=selected" : '' %>>
-                <a href="?date=<%=  @date %>&team=<%= t.id %>">
-                  <%= t.name %>
-                </a>
-              </li>
-            <% end %>
-          </ul>
+        <div class="form-inline">
+          <div class="form-group">
+            <label for="exampleInputName2">Teams:</label>
+            <div class="btn-group btn-group-team">
+              <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <%= @team ? @team.name : "Select Team" %> <span class="caret"></span>
+              </button>
+              <ul class="dropdown-menu">
+                <% @teams.each do |t| %>
+                  <li value="t.id" <%= @team && t.id == @team.id ? "class=selected" : '' %>>
+                    <a href="?date=<%=  @date %>&team=<%= t.id %>">
+                      <%= t.name %>
+                    </a>
+                  </li>
+                <% end %>
+              </ul>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -34,28 +48,16 @@ team_id = @team ? @team.id : nil
           <a class="btn btn-default" href="?date=<%= @date - 1 %>&team=<%= team_id %>">
             <span class="glyphicon glyphicon-chevron-left"></span>
           </a>
-
           <div class="current-wrapper">
-            <div class="form-group">
+            <div class="input-group">
               <div class='input-group date' id='datetimepicker1'>
                 <input type='text' class="form-control" />
                 <span class="input-group-addon">
                   <span class="glyphicon glyphicon-calendar"></span>
                 </span>
               </div>
-              <script type="text/javascript">
-                $(function () {
-                  $('#datetimepicker1').datetimepicker({
-                    defaultDate: "<%=@date%>",
-                    format: "MM/DD/YYYY"
-                  }).on('dp.change', function (ev) {
-                    location = "?date=" + ev.date.format("YYYY-MM-DD") + "&team=<%= team_id %>";
-                  });
-                });
-              </script>
             </div>
           </div>
-
           <a class="btn btn-default" href="?date=<%= @date == Date.today ? @date : @date + 1 %>&team=<%= team_id %>">
             <span class="glyphicon glyphicon-chevron-right"></span>
           </a>
