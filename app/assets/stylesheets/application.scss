@@ -2,6 +2,14 @@
 @import 'bootstrap';
 @import 'bootstrap-datetimepicker';
 
+body {
+  min-width: 1170px;
+}
+
+.container{
+  width: 1170px !important;
+}
+
 /*login-form*/
 .signin-form {
   width: 350px;
@@ -88,6 +96,18 @@ header {
 
 .users {
   padding: 20px 0;
+}
+
+.users {
+  display: flex;
+  flex-wrap: wrap;
+  margin: 0 -15px;
+  
+  .panel {
+    width: 50%;
+    width: calc(50% - 30px);
+    margin: 0 15px 30px 15px;
+  }
 }
 
 .panel {
