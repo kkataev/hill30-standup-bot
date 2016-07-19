@@ -39,8 +39,6 @@
   }
 }
 
-
-
 input:-webkit-autofill {
   background-color: #fff !important;
   transition: background-color 5000s ease-in-out 0s;
@@ -58,10 +56,15 @@ header {
 
   & > * {
     display: inline-block;
-    margin: 0 5px;
+    vertical-align: middle;
+    height: 34px;
+    margin: 0 2px;
   }
 
   .current-wrapper {
+    width: 150px;
+
+
     & > * {
       display: inline-block;
       margin: 0 2px;
@@ -71,6 +74,10 @@ header {
 /*!header*/
 
 /*users*/
+.btn-group.btn-group-team > .btn {
+  min-width: 130px;
+}
+
 .btn-group .selected {
   background: #f3f3f3 !important;
 }
