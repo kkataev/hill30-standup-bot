@@ -23,7 +23,7 @@ class SlackWorker
         end
       end
 
-      scheduler.cron '*/3 * * * *' do
+      scheduler.cron '* * * * *' do
         # TODO: send daily reminder here
         p "ping #{ Time.now }"
       end
