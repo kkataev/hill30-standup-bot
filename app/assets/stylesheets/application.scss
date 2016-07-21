@@ -62,7 +62,6 @@ header {
   //background: hsl(0,0%,93%);
   background: $primary-color;
   padding: 30px 0;
-  color: #fff;
 
   .btn,.form-control,.input-group-addon {
     border-radius: 0;
@@ -75,6 +74,10 @@ header {
       opacity: .7;
     }
 
+  }
+
+  .btn,.form-control,.input-group-addon, label {
+    color: #fff;
   }
 
   .btn,.input-group-addon {
