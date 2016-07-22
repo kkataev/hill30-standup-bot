@@ -24,7 +24,14 @@ team_id = @team ? @team.id : nil
       <div class="col-xs-4">
         <div class="form-inline">
           <div class="form-group">
-            <label for="exampleInputName2">Teams:</label>
+            <label for="exampleInputName2">
+              <span class="icon-group-wrapper">
+                <i class="glyphicon glyphicon-user"></i>
+                <i class="glyphicon glyphicon-user"></i>
+                <i class="glyphicon glyphicon-user"></i>
+              </span>
+              Teams:
+            </label>
             <div class="btn-group btn-group-team">
               <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 <%= @team ? @team.name : "Select Team" %> <span class="caret"></span>
@@ -68,12 +75,9 @@ team_id = @team ? @team.id : nil
         <% if user_signed_in? %>
           <a href="/logout"
               target="_blank" id="view-source"
-              class="pull-right btn btn-default"
+              class="pull-right btn btn-default btn-logout"
               data-upgraded=",MaterialButton,MaterialRipple">Log out
-              <span class="mdl-button__ripple-container">
-                <span class="mdl-ripple is-animating" style="width: 255.952px; height: 255.952px; transform: translate(-50%, -50%) translate(26px, 19px);">
-                </span>
-              </span>
+              <i class="glyphicon glyphicon-log-out"></i>
           </a>
         <% end %>
       </div>
@@ -116,6 +120,31 @@ team_id = @team ? @team.id : nil
       </div>
       <% end %>
     <% end %>
+
+
+    <!--
+    <div class="panel panel-default">
+      <div class="panel-heading"><img src="http://placehold.it/50x50"> test@mail.ru</div>
+      <div class="panel-body">
+        <div class="task">
+          <div class="task-title">Task title:</div>
+          <ul>
+              <li class="">item</li>
+              <li class="">item</li>
+              <li class="">item</li>
+          </ul>
+        </div>
+        <div class="task">
+          <div class="task-title">Task title:</div>
+          <ul>
+              <li class="">item</li>
+              <li class="">item</li>
+              <li class="">item</li>
+          </ul>
+        </div>
+      </div>
+    </div>-->
+
 
   </div>
 
