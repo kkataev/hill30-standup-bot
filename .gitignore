@@ -22,3 +22,6 @@ Vagrantfile
 .idea
 *.msi
 common.cab
+
+/*.sublime-project
+/*.sublime-workspace
